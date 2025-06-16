@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>DOLLARS USDT PRO</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <!-- Login Screen -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-container">
+      <div class="logo">
+        <i class="fas fa-coins"></i>
+        <span>DOLLARS USDT PRO</span>
+      </div>
+      <div class="login-card">
+        <h2>مرحباً في منصة التعدين</h2>
+        <p>قم بتسجيل الدخول للبدء في تعدين USDT</p>
+        <div class="loading-spinner" id="loadingSpinner">
+          <i class="fas fa-spinner fa-spin"></i>
+          <span>جاري التحقق من بيانات Telegram...</span>
+        </div>
+        <div class="error-message" id="errorMessage" style="display: none;">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>يرجى فتح التطبيق من داخل Telegram</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div class="main-app" id="mainApp" style="display: none;">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <i class="fas fa-coins"></i>
+          <span>DOLLARS USDT PRO</span>
+        </div>
+        <div class="user-info">
+          <div class="user-avatar" id="userAvatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="user-details">
+            <span class="user-name" id="userName">المستخدم</span>
+            <button class="wallet-btn" id="walletBtn">
+              <i class="fas fa-wallet"></i>
+              <span id="walletBalance">0.00</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Balance Card -->
+      <div class="balance-card">
+        <div class="balance-info">
+          <span class="balance-label">الرصيد الحالي</span>
+          <div class="balance-amount">
+            <span id="balance">0.00</span>
+            <span class="currency">USDT</span>
+          </div>
+          <div class="mining-earnings-info" id="miningEarningsInfo" style="display: none;">
+            <div class="earnings-cycle">
+              <i class="fas fa-coins"></i>
+              <span>الأرباح: 8.5 USDT كل دقيقة</span>
+            </div>
+            <div class="cycle-stats">
+              <div class="stat">
+                <span class="stat-label">الدورات المكتملة:</span>
+                <span class="stat-value" id="completedCycles">0</span>
+              </div>
+              <div class="stat">
+                <span class="stat-label">الربح القادم خلال:</span>
+                <span class="stat-value countdown-timer" id="nextEarningTime">01:00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mining-status" id="miningStatus">
+          <i class="fas fa-circle"></i>
+          <span>متوقف</span>
+        </div>
+      </div>
+
+      <!-- Mining Controls -->
+      <div class="controls">
+        <button id="startBtn" class="btn btn-primary">
+          <i class="fas fa-play"></i>
+          بدء التعدين
+        </button>
+        <button id="stopBtn" class="btn btn-secondary" disabled>
+          <i class="fas fa-stop"></i>
+          إيقاف
+        </button>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-info">
+          <span>تقدم الدورة الحالية: <span id="progressPercent">0%</span></span>
+          <span>8.5 USDT كل دقيقة</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-details">
+          <i class="fas fa-clock"></i>
+          <span>المتبقي للربح القادم: <span id="nextEarningTime">01:00</span></span>
+        </div>
+      </div>
+
+      <!-- Mining Details -->
+      <div class="mining-details" id="miningDetails">
+        <h3><i class="fas fa-microchip"></i> تفاصيل التعدين</h3>
+        <div class="mining-stats">
+          <div class="stat-item">
+            <div class="stat-label">معدل التجزئة</div>
+            <div class="stat-value" id="hashRate">0 H/s</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">الصعوبة</div>
+            <div class="stat-value" id="difficulty">18.5T</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">الكتل المعدنة</div>
+            <div class="stat-value" id="blocksCount">0</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">المعاملات/الثانية</div>
+            <div class="stat-value" id="transactions">0 TPS</div>
+          </div>
+        </div>
+        <div class="network-status">
+          <div class="network-item">
+            <i class="fas fa-globe"></i>
+            <span>حالة الشبكة: <span class="status-active" id="networkStatus">متصل</span></span>
+          </div>
+          <div class="network-item">
+            <i class="fas fa-users"></i>
+            <span>المعدنين النشطين: <span id="activeMiners">2,847</span></span>
+          </div>
+          <div class="network-item">
+            <i class="fas fa-server"></i>
+            <span>الخادم: <span class="server-location">الولايات المتحدة - NY</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activities -->
+      <div class="activities">
+        <h3><i class="fas fa-chart-line"></i> النشاطات الحديثة</h3>
+        <div class="activities-list" id="activitiesList"></div>
+      </div>
+
+      <!-- User Messages -->
+      <div class="user-messages">
+        <h3><i class="fas fa-comments"></i> رسائل المستخدمين</h3>
+        <div class="messages-list" id="messagesList"></div>
+      </div>
+    </main>
+
+    <!-- Withdraw Modal -->
+    <div class="modal" id="withdrawModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>سحب USDT</h3>
+          <button class="close-btn" id="closeBtn">&times;</button>
+        </div>
+
+        <div class="wallet-summary">
+          <div class="available-balance">
+            <i class="fas fa-wallet"></i>
+            <div class="balance-details">
+              <span class="balance-title">الرصيد المتاح</span>
+              <span class="balance-value" id="availableBalance">0.00 USDT</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>مبلغ السحب</label>
+          <div class="amount-input-container">
+            <input type="number" id="withdrawAmount" class="input" placeholder="0.00" min="0.01" step="0.01">
+            <button type="button" class="max-btn" id="maxBtn">الحد الأقصى</button>
+          </div>
+          <div class="fee-breakdown" id="feeBreakdown">
+            <div class="fee-info" id="feeInfo">الرسوم: 0 USDT</div>
+            <div class="net-amount" id="netAmount">المبلغ الصافي: 0.00 USDT</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>عنوان المحفظة</label>
+          <input type="text" id="walletAddress" class="input" placeholder="أدخل عنوان المحفظة...">
+        </div>
+
+        <label class="checkbox">
+          <input type="checkbox" id="confirmAddress">
+          <span class="checkmark"></span>
+          أؤكد صحة العنوان
+        </label>
+
+        <button class="btn btn-primary" id="confirmBtn" disabled>
+          <i class="fas fa-check"></i>
+          تأكيد السحب
+        </button>
+      </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>تأكيد الدفع</h3>
+        </div>
+
+        <div class="payment-details">
+          <div class="detail-row">
+            <span>مبلغ السحب:</span>
+            <span id="paymentAmount">0.00 USDT</span>
+          </div>
+          <div class="detail-row">
+            <span>الرسوم:</span>
+            <span id="paymentFee">9.00 USDT</span>
+          </div>
+        </div>
+
+        <div class="payment-address">
+          <div class="network-notice">
+            <i class="fas fa-info-circle"></i>
+            <span>يرجى الإيداع في شبكة TRC20 فقط</span>
+          </div>
+          <p>أرسل الرسوم إلى العنوان التالي:</p>
+          <div class="address-box">
+            <span class="address">TNa7R6G56pR9Xk2a8DHnxMVJdHyr1k3Ets</span>
+            <button class="copy-btn" id="copyBtn">
+              <i class="fas fa-copy"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="countdown">
+          <div class="timer" id="timer">09:59</div>
+          <div class="loading"></div>
+        </div>
+
+        <button class="btn btn-cancel" id="cancelBtn">
+          <i class="fas fa-times"></i>
+          إلغاء
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
